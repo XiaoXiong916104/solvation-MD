@@ -1,0 +1,13 @@
+# OS/editor temporary files
+.DS_Store
+Thumbs.db
+*.tmp
+*.bak
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Large scratch folders not needed for submission
+python_runs/
+python_api_runs/

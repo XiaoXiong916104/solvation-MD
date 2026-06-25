@@ -1,0 +1,22 @@
+units real
+atom_style full
+boundary p p p
+
+bond_style harmonic
+angle_style harmonic
+dihedral_style harmonic
+special_bonds lj/coul 0.0 0.0 1.0
+
+pair_style lj/cut/coul/long 12.0
+kspace_style pppm 1.0e-4
+read_data solvent_mix_1.data
+include pair_coeffs.in
+
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+
+thermo 100
+thermo_style custom step temp pe etotal press density
+min_style cg
+minimize 1.0e-4 1.0e-6 1000 10000
+write_data solvent_mix_1.minimized.data

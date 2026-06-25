@@ -1,0 +1,9 @@
+FINAL 200k NPT OUTPUT
+LAMMPS NVT exit code: 0
+LAMMPS NPT exit code: 0
+NPT trajectory frames: 101
+Last complete trajectory step: 200000
+Target NPT step: 200000
+Final LAMMPS data: solvent_mix_1_26ps_npt_100ps.data
+System: 1044 SPC/E water + 18 Zn2+ + 36 OTF/BFAF anions; net charge 0
+Last thermo row: step 200000, T=303.39 K, P=244.19 atm, density=1.1728 g/cm3, volume=35893.8 A^3

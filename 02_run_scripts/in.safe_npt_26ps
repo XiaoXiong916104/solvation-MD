@@ -1,0 +1,28 @@
+units real
+atom_style full
+boundary p p p
+
+bond_style harmonic
+angle_style harmonic
+dihedral_style harmonic
+special_bonds lj/coul 0.0 0.0 1.0
+
+pair_style lj/cut/coul/long 12.0
+kspace_style pppm 1.0e-4
+read_data solvent_mix_1_26ps_nvt.data
+include pair_coeffs.in
+
+neighbor 4.0 bin
+neigh_modify delay 0 every 1 check yes
+
+fix water all shake 1.0e-5 100 0 b 1 a 1
+fix ensemble all npt temp 300.0 300.0 200.0 iso 1.0 1.0 10000.0 drag 2.0
+
+timestep 0.5
+thermo 1000
+thermo_style custom step temp press pe etotal density vol
+reset_timestep 0
+dump traj all custom 2000 safe_npt_26ps.lammpstrj id mol type q x y z
+run 200000
+
+write_data solvent_mix_1_26ps_npt_100ps.data
