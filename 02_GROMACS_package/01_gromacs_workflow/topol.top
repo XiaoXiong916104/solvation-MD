@@ -1,0 +1,16 @@
+; Clean topology for water + Zn + OTF in a 5 nm cubic box.
+; Keep this file in the same folder as gromos54a7.ff/ and toppar/.
+
+#include "gromos54a7.ff/forcefield.itp"
+#include "gromos54a7.ff/spce.itp"
+#include "gromos54a7.ff/ions.itp"
+#include "toppar/OTF.itp"
+
+[ system ]
+Water_Zn_OTF_5nm
+
+[ molecules ]
+; molecule name   count
+SOL               1044
+ZN                18
+BFAF              36

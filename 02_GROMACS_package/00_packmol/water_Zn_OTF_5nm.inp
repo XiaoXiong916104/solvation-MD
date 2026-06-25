@@ -1,0 +1,24 @@
+tolerance 2.5
+filetype pdb
+output water_Zn_OTF_5nm.pdb
+
+# Packmol uses Angstrom. This box is 50 A = 5.0 nm in GROMACS.
+# System reproduced from the original sol_mix_1 folder:
+#   1044 water molecules (SOL)
+#   18 zinc ions (ZN)
+#   36 triflate/OTF anions (BFAF in topology)
+
+structure molecules/water.pdb
+  number 1044
+  inside box 0.0 0.0 0.0 50.0 50.0 50.0
+end structure
+
+structure molecules/Zn.pdb
+  number 18
+  inside box 0.0 0.0 0.0 50.0 50.0 50.0
+end structure
+
+structure molecules/OTF.pdb
+  number 36
+  inside box 0.0 0.0 0.0 50.0 50.0 50.0
+end structure

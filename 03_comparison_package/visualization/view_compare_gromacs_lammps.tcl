@@ -2,9 +2,9 @@
 # Toggle molecule visibility in VMD Main to inspect one result at a time.
 
 set script_dir [file dirname [info script]]
-set pkg_dir [file normalize [file join $script_dir ".." ".."]]
+set repo_dir [file normalize [file join $script_dir ".." ".."]]
 set lmp_gro [file join $script_dir "lammps_final_200k_gromacs_style_wrapped.gro"]
-set gmx_dir [file join $pkg_dir "07_gromacs_reference" "production_test_100ps"]
+set gmx_dir [file join $repo_dir "02_GROMACS_package" "03_results" "production_test_100ps"]
 set gmx_gro [file join $gmx_dir "production_test.gro"]
 set gmx_xtc [file join $gmx_dir "production_test.xtc"]
 

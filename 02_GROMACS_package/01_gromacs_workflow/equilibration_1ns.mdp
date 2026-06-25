@@ -1,0 +1,39 @@
+; 1 ns NVT equilibration at 300 K.
+; This reproduces the original Berendsen-equilibration style.
+
+integrator              = md
+dt                      = 0.001
+nsteps                  = 1000000
+
+nstxout-compressed      = 1000
+nstvout                 = 1000
+nstfout                 = 1000
+nstcalcenergy           = 100
+nstenergy               = 100
+nstlog                  = 100
+
+cutoff-scheme           = Verlet
+nstlist                 = 20
+rlist                   = 1.2
+vdwtype                 = Cut-off
+vdw-modifier            = Force-switch
+rvdw_switch             = 1.0
+rvdw                    = 1.2
+coulombtype             = PME
+rcoulomb                = 1.2
+
+tcoupl                  = berendsen
+tc_grps                 = System
+tau_t                   = 1.0
+ref_t                   = 300
+
+constraints             = h-bonds
+constraint_algorithm    = LINCS
+
+nstcomm                 = 100
+comm_mode               = linear
+comm_grps               = System
+
+gen-vel                 = yes
+gen-temp                = 298.15
+gen-seed                = -1
