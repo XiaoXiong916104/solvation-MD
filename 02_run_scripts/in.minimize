@@ -1,22 +1,44 @@
+# 目的：对最初转换得到的结构做能量最小化，去掉明显不合理的近距离接触。
+# 读法：先看单位/力场设置，再看 read_data/include，最后看 minimize 和输出文件。
+
+# real 单位：距离 Angstrom，时间 fs，能量 kcal/mol，温度 K，压力 atm。
 units real
+
+# full 原子风格：适合带电分子体系，Atoms 段包含 id mol type q x y z。
 atom_style full
+
+# 三个方向都是周期性边界，表示模拟体相液体盒子。
 boundary p p p
 
+# 键、角、二面角势函数均来自转换后的 GROMACS/ATB 参数。
 bond_style harmonic
 angle_style harmonic
 dihedral_style harmonic
+
+# 1-2 和 1-3 非键相互作用排除，1-4 保留全部 LJ/Coulomb；这是本拓扑转换采用的设定。
 special_bonds lj/coul 0.0 0.0 1.0
 
+# 非键相互作用：LJ 截断 12 A，库仑长程用 PPPM。
 pair_style lj/cut/coul/long 12.0
 kspace_style pppm 1.0e-4
+
+# 读取初始 LAMMPS data 文件；里面有原子、键、角、二面角、质量和电荷。
 read_data solvent_mix_1.data
+
+# 读取 LJ epsilon/sigma 的 pair_coeff 参数。
 include pair_coeffs.in
 
+# 邻居表设置：最小化阶段用 2 A skin，且每步检查更新。
 neighbor 2.0 bin
 neigh_modify delay 0 every 1 check yes
 
+# 每 100 步输出一次 thermo 信息；重点看势能 pe 是否下降、压力是否异常爆炸。
 thermo 100
 thermo_style custom step temp pe etotal press density
+
+# 共轭梯度最小化：能量容差 1e-4，力容差 1e-6，最多 1000 次迭代/10000 次力评估。
 min_style cg
 minimize 1.0e-4 1.0e-6 1000 10000
+
+# 保存最小化后的结构，给后续平衡模拟使用。
 write_data solvent_mix_1.minimized.data

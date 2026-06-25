@@ -1,29 +1,53 @@
+# 目的：从已经稳定到 26 ps 的结构重新出发，先在 NVT 下把温度稳定在 300 K。
+# 读法：重点看 read_data 的起点、velocity 的初速度、fix shake、fix nvt、run 步数。
+
+# real 单位：距离 Angstrom，时间 fs，能量 kcal/mol，温度 K，压力 atm。
 units real
+
+# full 原子风格用于带电分子体系。
 atom_style full
+
+# 周期性边界，模拟体相溶液。
 boundary p p p
 
+# 分子内相互作用形式。
 bond_style harmonic
 angle_style harmonic
 dihedral_style harmonic
 special_bonds lj/coul 0.0 0.0 1.0
 
+# 非键相互作用：LJ 截断 12 A，长程电荷用 PPPM。
 pair_style lj/cut/coul/long 12.0
 kspace_style pppm 1.0e-4
+
+# 这里不用最初结构，而是读取已稳定的 26 ps restart/data 结构。
 read_data solvent_mix_1_26ps.data
 include pair_coeffs.in
 
+# 邻居表 skin 设为 4 A，比最小化更宽松，适合动力学运行。
 neighbor 4.0 bin
 neigh_modify delay 0 every 1 check yes
 
+# 生成 300 K 初速度；812347 是随机种子，mom/rot yes 去掉整体平移和转动。
 velocity all create 300.0 812347 mom yes rot yes dist gaussian
+
+# 对水分子键长和角度使用 SHAKE 约束；这里 b 1 a 1 对应水的 O-H 键和 H-O-H 角。
 fix water all shake 1.0e-5 100 0 b 1 a 1
+
+# NVT 系综：粒子数 N、体积 V、温度 T 固定；温度阻尼 200 fs。
 fix ensemble all nvt temp 300.0 300.0 200.0
 
+# 时间步长 0.5 fs；20000 步就是 10 ps。
 timestep 0.5
+
+# 每 500 步打印一次温度、压力、能量、密度、体积。
 thermo 500
 thermo_style custom step temp press pe etotal density vol
 reset_timestep 0
+
+# 每 1000 步保存一帧轨迹，字段为 id/mol/type/charge/坐标。
 dump traj all custom 1000 safe_nvt_26ps.lammpstrj id mol type q x y z
 run 20000
 
+# 保存 NVT 后结构，作为后续 NPT 的起点。
 write_data solvent_mix_1_26ps_nvt.data

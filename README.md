@@ -94,6 +94,8 @@ Files prepared for report writing.
 
 Additional notes about file organization.
 
+- `LAMMPS_READING_GUIDE_CN.md`: Chinese guide for reading the LAMMPS input scripts, data files, and final outputs
+
 ## 3. Simulation workflow
 
 The overall workflow was:

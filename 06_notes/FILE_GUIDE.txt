@@ -1,4 +1,10 @@
-﻿LAMMPS submission package - file guide
+LAMMPS submission package - file guide
+
+中文快速读法：
+1. 先读 README.md，了解体系组成和最终结果。
+2. 再读 02_run_scripts/in.minimize、in.safe_nvt_26ps、in.safe_npt_26ps，看 LAMMPS 真正执行了什么。
+3. 遇到 read_data 就去 01_input_files 看对应 .data 文件；遇到 include pair_coeffs.in 就去看 LJ 参数。
+4. 最后看 03_output_files/final_200k 的 log、trajectory、thermo CSV 和 FINAL_STATUS。
 
 01_input_files
 - solvent_mix_1.data: original converted LAMMPS data file from GROMACS/Packmol model.
@@ -8,7 +14,6 @@
 
 02_run_scripts
 - in.minimize: LAMMPS minimization script.
-- in.equil_npt: original direct NPT script; kept for record, but it was too aggressive for the low-density starting box.
 - in.safe_nvt_26ps: safer NVT stabilization from the 26 ps stable frame.
 - in.safe_npt_26ps: safer slow NPT equilibration script.
 - convert_gromacs_to_lammps.py: Python conversion script.
@@ -17,23 +22,25 @@
 - run_safe_pipeline.ps1: PowerShell pipeline used to run NVT then NPT.
 
 03_output_files
-- current_in_progress_180k: current output snapshot copied while NPT was still running.
-- When the NPT run reaches 200000 steps, final files should be copied here:
+- final_200k: completed final output snapshot after the NPT run reached 200000 steps.
+- Main final files:
   * safe_npt_26ps.log
   * safe_npt_26ps.lammpstrj
   * solvent_mix_1_26ps_npt_100ps.data
-  * final thermo CSV and summary.
+  * thermo_final_200k.csv
+  * FINAL_STATUS.txt
 
 04_visualization
 - VMD2-compatible XYZ and Tcl files.
-- Open vmd_safe_npt_current.xyz or source view_safe_npt_current.tcl in VMD2.
+- Open vmd_safe_npt_final_200k.xyz or source view_final_200k.tcl in VMD2.
 
 05_report_assets
 - CSV/PNG/summary files for report writing.
-- These are current snapshots and can be regenerated after the final 200000-step run completes.
+- These are final 200000-step snapshots and can be regenerated from the final log/trajectory.
 
 06_notes
 - Notes and status files.
+- LAMMPS_READING_GUIDE_CN.md: Chinese guide for reading the input scripts and outputs.
 
 Simulation method summary for report:
 LAMMPS was used for molecular dynamics simulations. Python scripts were used for format conversion, LAMMPS API/subprocess control, output archiving, and post-processing. VMD2 was used for trajectory visualization.

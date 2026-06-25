@@ -1,4 +1,11 @@
 # Pair coefficients converted from GROMOS C6/C12 to LAMMPS real-unit LJ epsilon/sigma.
+# 中文读法：
+# pair_coeff i j epsilon sigma
+# - i/j 是 LAMMPS atom type 编号，对应 data 文件 Masses 段：1 OW, 2 H, 3 ZN2+, 4 F, 5 C, 6 SDmso, 7 OM。
+# - epsilon 单位是 kcal/mol，决定 LJ 势阱深度。
+# - sigma 单位是 Angstrom，决定 LJ 尺寸。
+# - 带 H 的 LJ 多数为 0，因为水氢通常只通过电荷参与非键相互作用；水几何由 SHAKE 约束。
+# - 这些参数被 in.minimize / in.safe_nvt_26ps / in.safe_npt_26ps 通过 include pair_coeffs.in 读入。
 pair_coeff  1  1     0.15539371   3.16564828 # OW-OW
 pair_coeff  1  2     0.00000000   1.00000000 # OW-H
 pair_coeff  1  3     0.41475339   2.30690852 # OW-ZN2+
