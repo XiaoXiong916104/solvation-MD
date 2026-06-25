@@ -1,42 +1,24 @@
-﻿# GROMACS/LAMMPS matched VMD visualization
+# VMD visualization files
 
-This folder contains VMD2 visualization files prepared to compare the GROMACS 100 ps production test and the final LAMMPS 200k NPT result using a similar display style.
+This folder contains the cleaned visualization files used for the report comparison.
 
-## Source trajectories
+## Recommended files
 
-GROMACS:
+- `lammps_final_200k_gromacs_style_wrapped.gro`: corrected LAMMPS final frame for VMD. Atom type mapping was corrected from the LAMMPS data file: type 3 is Zn.
+- `view_lammps_gromacs_style_wrapped.tcl`: VMD script for the corrected LAMMPS final frame.
+- `view_gromacs_100ps.tcl`: VMD script for the GROMACS 100 ps reference trajectory stored in `07_gromacs_reference/production_test_100ps`.
+- `view_compare_gromacs_lammps.tcl`: loads both systems into VMD for manual comparison.
 
-- `../production_test_100ps/production_test.gro`
-- `../production_test_100ps/production_test.xtc`
+## How to open the corrected LAMMPS view
 
-LAMMPS:
-
-- `lammps_final_200k_vmd.pdb`
-- converted from `LAMMPS_submission_package/03_output_files/final_200k/safe_npt_26ps.lammpstrj`
-
-## VMD scripts
-
-Open VMD2, then in Tk Console run one of these:
+Open VMD, then in `Extensions -> Tk Console` run:
 
 ```tcl
-source "C:/Users/xiong/Desktop/solvation MD/MD simulation/GROMACS_reproduction_water_Zn_OTF_5nm_20260625/results/production_test_100ps_vmd/view_gromacs_100ps.tcl"
+source "<repository>/04_visualization/gromacs_matched_view/view_lammps_gromacs_style_wrapped.tcl"
 ```
 
-```tcl
-source "C:/Users/xiong/Desktop/solvation MD/MD simulation/GROMACS_reproduction_water_Zn_OTF_5nm_20260625/results/production_test_100ps_vmd/view_lammps_final_matched.tcl"
-```
+The display uses black background, white PBC box, water as lines, Zn as cyan VDW spheres, OTF/BFAF as licorice, and the Zn solvation shell as thicker licorice.
 
-```tcl
-source "C:/Users/xiong/Desktop/solvation MD/MD simulation/GROMACS_reproduction_water_Zn_OTF_5nm_20260625/results/production_test_100ps_vmd/view_compare_gromacs_lammps.tcl"
-```
+## Important note
 
-## Display style
-
-- Water (`SOL`): transparent CPK
-- Zn ions (`ZN`): large VDW spheres
-- OTF/BFAF anions (`BFAF`): licorice
-- Zn first-shell environment within 2.8 A: highlighted licorice
-
-## Notes
-
-The LAMMPS trajectory was converted to multi-model PDB instead of plain XYZ so that VMD selections such as `resname SOL`, `resname ZN`, and `resname BFAF` work correctly. This makes it easier to match the GROMACS visualization style.
+The early PDB trial files were removed because VMD can misread 4-character residue names such as `BFAF` and can guess incorrect bonds when topology is absent. The corrected report view uses GRO format instead.

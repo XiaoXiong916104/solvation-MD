@@ -1,42 +1,48 @@
-# VMD2 script: visualize GROMACS 100 ps production test.
-# Tk Console:
-# source "C:/Users/xiong/Desktop/solvation MD/MD simulation/GROMACS_reproduction_water_Zn_OTF_5nm_20260625/results/production_test_100ps_vmd/view_gromacs_100ps.tcl"
+# VMD script: GROMACS 100 ps reference trajectory.
+# Use in VMD Tk Console:
+# source ".../04_visualization/gromacs_matched_view/view_gromacs_100ps.tcl"
 
-mol new "C:/Users/xiong/Desktop/solvation MD/MD simulation/GROMACS_reproduction_water_Zn_OTF_5nm_20260625/results/production_test_100ps/production_test.gro" type gro waitfor all
-mol addfile "C:/Users/xiong/Desktop/solvation MD/MD simulation/GROMACS_reproduction_water_Zn_OTF_5nm_20260625/results/production_test_100ps/production_test.xtc" type xtc waitfor all
+set script_dir [file dirname [info script]]
+set pkg_dir [file normalize [file join $script_dir ".." ".."]]
+set gmx_dir [file join $pkg_dir "07_gromacs_reference" "production_test_100ps"]
+set gmx_gro [file join $gmx_dir "production_test.gro"]
+set gmx_xtc [file join $gmx_dir "production_test.xtc"]
+
+mol delete all
+mol new $gmx_gro type gro waitfor all
+mol addfile $gmx_xtc type xtc waitfor all
+mol rename top "GROMACS production test 100 ps"
 mol delrep 0 top
 
-# Water: light transparent small spheres.
-mol representation CPK 0.35 0.12 16 12
-mol color ColorID 0
+mol representation Lines 1.0
+mol color Name
 mol selection "resname SOL"
-mol material Transparent
+mol material Opaque
 mol addrep top
 
-# Zn ions: large highlighted spheres.
-mol representation VDW 1.05 24
-mol color ColorID 4
+mol representation VDW 1.45 32
+mol color ColorID 10
 mol selection "resname ZN or name ZN"
 mol material Opaque
 mol addrep top
 
-# OTF/BFAF anions.
-mol representation Licorice 0.22 16 16
+mol representation Licorice 0.12 16 12
 mol color Name
-mol selection "resname BFAF or not (resname SOL ZN)"
+mol selection "resname BFAF"
 mol material Opaque
 mol addrep top
 
-# Zn first-shell environment.
-mol representation Licorice 0.18 12 12
-mol color ColorID 1
-mol selection "same residue as within 2.8 of (resname ZN or name ZN)"
+mol representation Licorice 0.18 16 12
+mol color Name
+mol selection "same residue as within 3.5 of (resname ZN or name ZN)"
 mol material Opaque
 mol addrep top
 
-animate goto last
+package require pbctools
+pbc box -color white -width 2
+axes location LowerLeft
+color Display Background black
 display projection Orthographic
 display depthcue off
-axes location Off
-color Display Background white
-puts "Loaded GROMACS production_test.gro + production_test.xtc; frames: [molinfo top get numframes]"
+display resetview
+scale by 1.25
